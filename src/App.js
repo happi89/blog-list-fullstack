@@ -1,17 +1,13 @@
+import { BlogForm } from './components/BlogForm';
 import { useState, useEffect } from 'react';
-import Blog from './components/Blog';
-import blogService from './services/blogs';
-import loginService from './services/login';
+import Blog from './components/Blogs';
+import blogService from './services/blog';
 import Notification from './components/Notification';
+import LoginForm from './components/LoginForm';
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
 	const [user, setUser] = useState(null);
-	const [title, setTitle] = useState('');
-	const [author, setAuthor] = useState('');
-	const [url, setUrl] = useState('');
 	const [success, setSuccess] = useState(null);
 	const [color, setColor] = useState(null);
 
@@ -28,50 +24,6 @@ const App = () => {
 		}
 	}, []);
 
-	const handleLogin = async (event) => {
-		event.preventDefault();
-		console.log(username, password);
-		try {
-			const user = await loginService.login({ username, password });
-			window.localStorage.setItem('loggedInUser', JSON.stringify(user));
-			blogService.setToken(user.token);
-			setUser(user);
-			setUsername('');
-			setPassword('');
-		} catch (err) {
-			console.log(err);
-			setColor('red');
-			setTimeout(() => {
-				setSuccess(null);
-			}, 5000);
-			setSuccess('Invalid username or password');
-		}
-	};
-
-	const loginForm = () => (
-		<form onSubmit={handleLogin}>
-			<div>
-				Username
-				<input
-					type='text'
-					name='Username'
-					value={username}
-					onChange={({ target }) => setUsername(target.value)}
-				/>
-			</div>
-			<div>
-				Password
-				<input
-					type='password'
-					name='Password'
-					value={password}
-					onChange={({ target }) => setPassword(target.value)}
-				/>
-			</div>
-			<button type='submit'>login</button>
-		</form>
-	);
-
 	const logout = (event) => {
 		event.preventDefault();
 		setUser(null);
@@ -79,52 +31,11 @@ const App = () => {
 		window.localStorage.clear();
 	};
 
-	const blogForm = () => (
-		<form onSubmit={HandleBlogSubmit}>
-			<h1>Add Blog</h1>
-			<div>
-				title
-				<input
-					type='text'
-					name='Title'
-					value={title}
-					onChange={({ target }) => setTitle(target.value)}
-				/>
-			</div>
-			<div>
-				author
-				<input
-					type='text'
-					name='Author'
-					value={author}
-					onChange={({ target }) => setAuthor(target.value)}
-				/>
-			</div>
-			<div>
-				url
-				<input
-					type='link'
-					name='URL'
-					value={url}
-					onChange={({ target }) => setUrl(target.value)}
-				/>
-			</div>
-			<button type='submit'>Add</button>
-		</form>
-	);
-
-	const HandleBlogSubmit = (event) => {
-		event.preventDefault();
-		const newBlog = {
-			title,
-			author,
-			url,
-		};
-
+	const addBlog = (newBlog) => {
 		blogService
 			.addBlog(newBlog)
+			.then((newBlog) => blogs.concat(newBlog))
 			.then(() => {
-				blogService.getAll().then((blogs) => setBlogs(blogs));
 				setTimeout(() => {
 					setSuccess(null);
 				}, 5000);
@@ -138,19 +49,18 @@ const App = () => {
 				}, 5000);
 				setSuccess('Could not add blog');
 			});
-
-		setTitle('');
-		setAuthor('');
-		setUrl('');
-		blogService.getAll().then((blogs) => setBlogs(blogs));
 	};
 
 	return (
 		<>
 			{user === null ? (
 				<>
-					<Notification message={success} color={color} />
-					{loginForm()}
+					<Notification message={success} color={color} setColor={setColor} />
+					<LoginForm
+						setColor={setColor}
+						setUser={setUser}
+						setSuccess={setSuccess}
+					/>
 				</>
 			) : (
 				<div>
@@ -160,7 +70,7 @@ const App = () => {
 					<button onClick={logout} type='submit'>
 						logout
 					</button>
-					{blogForm()}
+					<BlogForm createBlog={addBlog} />
 					{blogs.map((blog) => (
 						<Blog key={blog.id} blog={blog} />
 					))}{' '}
