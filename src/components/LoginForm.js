@@ -1,6 +1,7 @@
 import loginService from '../services/login';
 import blogService from '../services/blog';
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const LoginForm = ({ setUser, setColor, setSuccess }) => {
 	const [username, setUsername] = useState('');
@@ -48,6 +49,12 @@ const LoginForm = ({ setUser, setColor, setSuccess }) => {
 			<button type='submit'>login</button>
 		</form>
 	);
+};
+
+LoginForm.propTypes = {
+	setUser: PropTypes.func.isRequired,
+	setColor: PropTypes.func.isRequired,
+	setSuccess: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
