@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export function BlogForm({ createBlog }) {
+const BlogForm = ({ createBlog }) => {
 	const [title, setTitle] = useState('');
 	const [author, setAuthor] = useState('');
 	const [url, setUrl] = useState('');
@@ -46,7 +46,7 @@ export function BlogForm({ createBlog }) {
 			<div>
 				url
 				<input
-					type='text'
+					type='url'
 					name='URL'
 					value={url}
 					onChange={({ target }) => setUrl(target.value)}
@@ -55,4 +55,6 @@ export function BlogForm({ createBlog }) {
 			<button type='submit'>Add</button>
 		</form>
 	);
-}
+};
+
+export default BlogForm;

@@ -1,9 +1,10 @@
-import { BlogForm } from './components/BlogForm';
-import { useState, useEffect } from 'react';
+import BlogForm from './components/BlogForm';
+import { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blogs';
 import blogService from './services/blog';
 import Notification from './components/Notification';
 import LoginForm from './components/LoginForm';
+import Toggable from './components/Toggable';
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -12,7 +13,9 @@ const App = () => {
 	const [color, setColor] = useState(null);
 
 	useEffect(() => {
-		blogService.getAll().then((blogs) => setBlogs(blogs));
+		blogService
+			.getAll()
+			.then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
 	}, []);
 
 	useEffect(() => {
@@ -31,11 +34,14 @@ const App = () => {
 		window.localStorage.clear();
 	};
 
+	const blogFormRef = useRef(null);
+
 	const addBlog = (newBlog) => {
+		blogFormRef.current.toggleVisibility();
 		blogService
 			.addBlog(newBlog)
-			.then((newBlog) => blogs.concat(newBlog))
-			.then(() => {
+			.then((newBlog) => {
+				setBlogs(blogs.concat(newBlog));
 				setTimeout(() => {
 					setSuccess(null);
 				}, 5000);
@@ -50,6 +56,44 @@ const App = () => {
 				setSuccess('Could not add blog');
 			});
 	};
+
+	const addLike = (blog) => {
+		const updatedBlog = {
+			...blog,
+			likes: (blog.likes += 1),
+		};
+		blogService.addLike(updatedBlog).then((updatedBlog) => {
+			setBlogs(
+				blogs
+					.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
+					.sort((a, b) => b.likes - a.likes)
+			);
+		});
+	};
+
+	const showDeleteButton = (blog) => {
+		if (user.username === blog.user.username) {
+			return <button onClick={() => deleteBlog(blog)}>delete</button>;
+		}
+	};
+
+	const deleteBlog = (blogToDelete) => {
+		if (
+			window.confirm(
+				`Remove blog ${blogToDelete.title} by ${blogToDelete.author}`
+			)
+		) {
+			blogService
+				.deleteBlog(blogToDelete)
+				.then(setBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id)));
+		}
+	};
+
+	const blogForm = () => (
+		<Toggable buttonLabel='Add Blog' ref={blogFormRef}>
+			<BlogForm createBlog={addBlog} />
+		</Toggable>
+	);
 
 	return (
 		<>
@@ -70,9 +114,15 @@ const App = () => {
 					<button onClick={logout} type='submit'>
 						logout
 					</button>
-					<BlogForm createBlog={addBlog} />
+					{blogForm()}
 					{blogs.map((blog) => (
-						<Blog key={blog.id} blog={blog} />
+						<Blog
+							blog={blog}
+							addLike={addLike}
+							deleteBlog={deleteBlog}
+							showDeleteButton={showDeleteButton}
+							key={blog.id}
+						/>
 					))}{' '}
 				</div>
 			)}
