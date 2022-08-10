@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-const Blog = ({ blog, addLike, deleteBlog, showDeleteButton }) => {
+// eslint-disable-next-line no-unused-vars
+const Blog = ({ blog, addLike, showDeleteButton }) => {
 	const blogStyle = {
 		paddingTop: 10,
 		paddingLeft: 2,
@@ -26,7 +27,7 @@ const Blog = ({ blog, addLike, deleteBlog, showDeleteButton }) => {
 			</div>
 
 			<div style={showWhenHidden}>
-				{blog.title} <strong>by {blog.author}</strong>{' '}
+				{blog.title} by {blog.author}{' '}
 				<button onClick={toggleVisibility}>Hide</button>
 				<p>
 					Url:{' '}
@@ -40,9 +41,9 @@ const Blog = ({ blog, addLike, deleteBlog, showDeleteButton }) => {
 				</p>
 				<p>
 					<strong>posted by: </strong>
-					{blog.user.username}
+					{blog?.user?.username}
 				</p>
-				{showDeleteButton(blog)}
+				{/* {showDeleteButton(blog)} */}
 			</div>
 		</div>
 	);
