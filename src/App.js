@@ -1,6 +1,6 @@
 import BlogForm from './components/BlogForm';
 import { useState, useEffect, useRef } from 'react';
-import Blog from './components/Blogs';
+import Blog from './components/Blog';
 import blogService from './services/blog';
 import Notification from './components/Notification';
 import LoginForm from './components/LoginForm';
@@ -53,7 +53,7 @@ const App = () => {
 				setTimeout(() => {
 					setSuccess(null);
 				}, 5000);
-				setSuccess('Could not add blog');
+				setSuccess('Could not add blog', error);
 			});
 	};
 
