@@ -43,7 +43,7 @@ const Blog = ({ blog, addLike, showDeleteButton }) => {
 					<strong>posted by: </strong>
 					{blog?.user?.username}
 				</p>
-				{/* {showDeleteButton(blog)} */}
+				{showDeleteButton(blog)}
 			</div>
 		</div>
 	);

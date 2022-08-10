@@ -13,7 +13,7 @@ const Notification = ({ message, color }) => {
 				textAlign: 'center',
 				color: `${color}`,
 			}}>
-			<h1>{message}</h1>
+			<h1 id='notification'>{message}</h1>
 		</div>
 	);
 };
