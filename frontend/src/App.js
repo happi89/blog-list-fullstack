@@ -5,6 +5,7 @@ import blogService from './services/blog';
 import Notification from './components/Notification';
 import LoginForm from './components/LoginForm';
 import Toggable from './components/Toggable';
+import SignUpForm from './components/SignUpForm';
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -100,11 +101,22 @@ const App = () => {
 			{user === null ? (
 				<>
 					<Notification message={success} color={color} setColor={setColor} />
-					<LoginForm
-						setColor={setColor}
-						setUser={setUser}
-						setSuccess={setSuccess}
-					/>
+					<h3>Login</h3>
+					<div>
+						<LoginForm
+							setColor={setColor}
+							setUser={setUser}
+							setSuccess={setSuccess}
+						/>
+					</div>
+					<h3>Sign Up</h3>
+					<div>
+						<SignUpForm
+							setColor={setColor}
+							setUser={setUser}
+							setSuccess={setSuccess}
+						/>
+					</div>
 				</>
 			) : (
 				<div>
