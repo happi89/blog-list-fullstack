@@ -26,6 +26,7 @@ mongoose
 		logger.error('error connecting to MongoDB', err.message);
 	});
 
+app.use(express.static('./build'));
 app.use(cors());
 app.use(express.json());
 app.use(morgan('tiny'));
