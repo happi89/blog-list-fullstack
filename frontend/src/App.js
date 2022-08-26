@@ -11,7 +11,7 @@ const App = () => {
 	const [blogs, setBlogs] = useState([]);
 	const [user, setUser] = useState(null);
 	const [success, setSuccess] = useState(null);
-	const [color, setColor] = useState(null);
+	const [type, setType] = useState(null);
 
 	useEffect(() => {
 		blogService
@@ -46,11 +46,11 @@ const App = () => {
 				setTimeout(() => {
 					setSuccess(null);
 				}, 5000);
-				setColor('green');
+				setType('success');
 				setSuccess(`Blog ${newBlog.title} by ${newBlog.author} has been added`);
 			})
 			.catch((error) => {
-				setColor('red');
+				setType('error');
 				setTimeout(() => {
 					setSuccess(null);
 				}, 5000);
@@ -74,7 +74,13 @@ const App = () => {
 
 	const showDeleteButton = (blog) => {
 		if (user.username === blog.user.username) {
-			return <button onClick={() => deleteBlog(blog)}>delete</button>;
+			return (
+				<button
+					onClick={() => deleteBlog(blog)}
+					className='btn btn-sm w-full btn-error mt-2'>
+					delete
+				</button>
+			);
 		}
 	};
 
@@ -99,33 +105,37 @@ const App = () => {
 	return (
 		<>
 			{user === null ? (
-				<>
-					<Notification message={success} color={color} setColor={setColor} />
-					<h3>Login</h3>
+				<div className='flex flex-col items-center p-6'>
+					<Notification message={success} type={type} />
+					<h3 className='text-center font-bold text-2xl my-6'>Login</h3>
 					<div>
 						<LoginForm
-							setColor={setColor}
+							setType={setType}
 							setUser={setUser}
 							setSuccess={setSuccess}
 						/>
 					</div>
-					<h3>Sign Up</h3>
+					<h3 className='text-center font-bold text-2xl my-6'>Sign Up</h3>
 					<div>
-						<SignUpForm
-							setColor={setColor}
-							setUser={setUser}
-							setSuccess={setSuccess}
-						/>
+						<SignUpForm setType={setType} setSuccess={setSuccess} />
 					</div>
-				</>
+				</div>
 			) : (
-				<div>
-					<h2>blogs</h2>
-					<Notification message={success} color={color} />
-					<p>logged in user {user.name}</p>
-					<button onClick={logout} type='submit'>
-						logout
-					</button>
+				<div className='flex flex-col items-center'>
+					<nav className='navbar bg-base-100 shadow-md flex flex-row justify-center gap-2 mb-4'>
+						<div className='flex-1'>
+							<a className='btn btn-ghost normal-case text-xl font-bold'>
+								Blog List
+							</a>
+						</div>
+						<div className='flex-none gap-4 mr-4'>
+							<p>user: {user.name}</p>
+							<btn className='btn btn-sm' onClick={logout} type='submit'>
+								logout
+							</btn>
+						</div>
+					</nav>
+					<Notification message={success} type={type} />
 					{blogForm()}
 					{blogs.map((blog) => (
 						<Blog

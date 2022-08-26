@@ -3,7 +3,7 @@ import blogService from '../services/blog';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const LoginForm = ({ setUser, setColor, setSuccess }) => {
+const LoginForm = ({ setUser, setType, setSuccess }) => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
@@ -17,11 +17,10 @@ const LoginForm = ({ setUser, setColor, setSuccess }) => {
 			setUsername('');
 			setPassword('');
 		} catch (err) {
-			console.log(err);
-			setColor('red');
 			setTimeout(() => {
 				setSuccess(null);
 			}, 5000);
+			setType('error');
 			setSuccess('Invalid username or password');
 		}
 	};
@@ -29,8 +28,11 @@ const LoginForm = ({ setUser, setColor, setSuccess }) => {
 	return (
 		<form onSubmit={handleLogin}>
 			<div>
-				Username
+				<label className='label'>
+					<span className='label-text'>Username</span>
+				</label>
 				<input
+					className='input input-bordered w-full max-w-xs'
 					type='text'
 					name='Username'
 					id='username'
@@ -39,8 +41,11 @@ const LoginForm = ({ setUser, setColor, setSuccess }) => {
 				/>
 			</div>
 			<div>
-				Password
+				<label className='label'>
+					<span className='label-text'>Password</span>
+				</label>
 				<input
+					className='input input-bordered w-full max-w-xs'
 					type='password'
 					name='Password'
 					id='password'
@@ -48,7 +53,7 @@ const LoginForm = ({ setUser, setColor, setSuccess }) => {
 					onChange={({ target }) => setPassword(target.value)}
 				/>
 			</div>
-			<button type='submit' id='login-button'>
+			<button type='submit' className='btn btn-primary btn-wide mt-4'>
 				login
 			</button>
 		</form>

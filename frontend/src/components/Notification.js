@@ -1,18 +1,12 @@
 import React from 'react';
 
-const Notification = ({ message, color }) => {
+const Notification = ({ message, type }) => {
 	if (message === null) {
 		return null;
 	}
 
 	return (
-		<div
-			style={{
-				border: `3px solid ${color}`,
-				borderRadius: '15px',
-				textAlign: 'center',
-				color: `${color}`,
-			}}>
+		<div className={`alert alert-${type} shadow-lg`}>
 			<h1 id='notification'>{message}</h1>
 		</div>
 	);

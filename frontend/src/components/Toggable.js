@@ -18,11 +18,17 @@ const Toggable = forwardRef((props, ref) => {
 	return (
 		<div>
 			<div style={hideWhenShown}>
-				<button onClick={toggleVisibility}>{props.buttonLabel}</button>
+				<button
+					onClick={toggleVisibility}
+					className='btn btn-primary btn-sm m-4'>
+					{props.buttonLabel}
+				</button>
 			</div>
 			<div style={showWhenHidden} className='toggableContent'>
 				{props.children}
-				<button onClick={toggleVisibility}>cancel</button>
+				<button onClick={toggleVisibility} className='btn btn-wide btn-sm my-3'>
+					cancel
+				</button>
 			</div>
 		</div>
 	);

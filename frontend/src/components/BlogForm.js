@@ -24,10 +24,13 @@ const BlogForm = ({ createBlog }) => {
 
 	return (
 		<form onSubmit={HandleBlogSubmit}>
-			<h1>Add Blog</h1>
+			<h1 className='font-bold text-xl mt-4'>Add Blog</h1>
 			<div>
-				title
+				<label className='label'>
+					<span className='label-text'>Title</span>
+				</label>
 				<input
+					className='input input-bordered w-full max-w-xs'
 					type='text'
 					name='Title'
 					id='title'
@@ -37,8 +40,11 @@ const BlogForm = ({ createBlog }) => {
 				/>
 			</div>
 			<div>
-				author
+				<label className='label'>
+					<span className='label-text'>Author</span>
+				</label>
 				<input
+					className='input input-bordered w-full max-w-xs'
 					type='text'
 					name='Author'
 					id='author'
@@ -48,8 +54,11 @@ const BlogForm = ({ createBlog }) => {
 				/>
 			</div>
 			<div>
-				url
+				<label className='label'>
+					<span className='label-text'>URL</span>
+				</label>
 				<input
+					className='input input-bordered w-full max-w-xs'
 					type='url'
 					name='URL'
 					id='url'
@@ -58,7 +67,7 @@ const BlogForm = ({ createBlog }) => {
 					onChange={({ target }) => setUrl(target.value)}
 				/>
 			</div>
-			<button type='submit' id='add-blog'>
+			<button type='submit' className='btn btn-primary btn-wide mt-3'>
 				Add
 			</button>
 		</form>

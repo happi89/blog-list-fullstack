@@ -1,18 +1,35 @@
-// import loginService from '../services/login';
-// import blogService from '../services/blog';
 import React, { useState } from 'react';
-// import PropTypes from 'prop-types';
+import userService from '../services/user';
 
-const SignUpForm = () => {
+const SignUpForm = ({ setSuccess, setType }) => {
 	const [name, setName] = useState('');
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
+	const onSubmit = async (event) => {
+		event.preventDefault();
+		try {
+			await userService.addUser({ username, password, name });
+			setName('');
+			setUsername('');
+			setPassword('');
+		} catch (err) {
+			setTimeout(() => {
+				setSuccess(null);
+			}, 5000);
+			setType('error');
+			setSuccess('invalid or missing properties');
+		}
+	};
+
 	return (
-		<form>
+		<form onSubmit={onSubmit}>
 			<div>
-				Username
+				<label className='label'>
+					<span className='label-text'>Username</span>
+				</label>
 				<input
+					className='input input-bordered w-full max-w-xs'
 					type='text'
 					name='Username'
 					id='username'
@@ -21,8 +38,11 @@ const SignUpForm = () => {
 				/>
 			</div>
 			<div>
-				Name
+				<label className='label'>
+					<span className='label-text'>Name</span>
+				</label>
 				<input
+					className='input input-bordered w-full max-w-xs'
 					type='text'
 					name='Name'
 					id='name'
@@ -31,8 +51,11 @@ const SignUpForm = () => {
 				/>
 			</div>
 			<div>
-				Password
+				<label className='label'>
+					<span className='label-text'>Password</span>
+				</label>
 				<input
+					className='input input-bordered w-full max-w-xs'
 					type='password'
 					name='Password'
 					id='password'
@@ -40,7 +63,7 @@ const SignUpForm = () => {
 					onChange={({ target }) => setPassword(target.value)}
 				/>
 			</div>
-			<button type='submit' id='login-button'>
+			<button type='submit' className='btn btn-primary btn-wide mt-4'>
 				login
 			</button>
 		</form>
