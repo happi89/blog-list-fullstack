@@ -1,14 +1,45 @@
 import { useState } from 'react';
+import blogService from '../services/blog';
 
 // eslint-disable-next-line no-unused-vars
-const Blog = ({ blog, addLike, showDeleteButton }) => {
-	// const blogStyle = {
-	// 	paddingTop: 10,
-	// 	paddingLeft: 2,
-	// 	border: 'solid',
-	// 	borderWidth: 1,
-	// 	marginBottom: 5,
-	// };
+const Blog = ({ blog, setBlogs, user, blogs }) => {
+	const showDeleteButton = (blog) => {
+		if (user?.username === blog.user.username) {
+			return (
+				<button
+					onClick={() => deleteBlog(blog)}
+					className='btn btn-sm w-full btn-error mt-2'>
+					delete
+				</button>
+			);
+		}
+	};
+
+	const deleteBlog = (blogToDelete) => {
+		if (
+			window.confirm(
+				`Remove blog ${blogToDelete.title} by ${blogToDelete.author}`
+			)
+		) {
+			blogService
+				.deleteBlog(blogToDelete)
+				.then(setBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id)));
+		}
+	};
+
+	const addLike = (blog) => {
+		const updatedBlog = {
+			...blog,
+			likes: (blog.likes += 1),
+		};
+		blogService.addLike(updatedBlog).then((updatedBlog) => {
+			setBlogs(
+				blogs
+					.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
+					.sort((a, b) => b.likes - a.likes)
+			);
+		});
+	};
 
 	const [visible, setVisible] = useState(true);
 
