@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import userServices from '../services/user';
 
@@ -26,7 +26,11 @@ const User = () => {
 				<tbody>
 					{user?.blogs.map((blog) => (
 						<tr key={blog?.id}>
-							<td>{blog?.title}</td>
+							<td>
+								<Link className='link' to={`/blogs/${blog.id}`}>
+									{blog?.title}
+								</Link>
+							</td>
 							<td>
 								<a
 									className='link'

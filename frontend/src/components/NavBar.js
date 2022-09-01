@@ -17,25 +17,30 @@ const NavBar = ({ user, setUser }) => {
 				<a className='btn btn-ghost normal-case text-xl font-bold'>Blog List</a>
 			</div>
 
-			<div className='btn-group'>
-				<button
-					className='btn btn-ghost text-xl'
-					onClick={() => navigate('/users')}>
-					All Users
-				</button>
-				<button
-					className='btn btn-ghost text-xl'
-					onClick={() => navigate('/blogs')}>
-					Blogs
-				</button>
-			</div>
-
-			<div className='flex-none gap-4 mr-4'>
-				<p>user: {user?.name}</p>
-				<button className='btn btn-sm' onClick={logout} type='submit'>
-					logout
-				</button>
-			</div>
+			{user ? (
+				<>
+					<div className='btn-group'>
+						<button
+							className='btn btn-ghost text-xl'
+							onClick={() => navigate('/users')}>
+							All Users
+						</button>
+						<button
+							className='btn btn-ghost text-xl'
+							onClick={() => navigate('/blogs')}>
+							Blogs
+						</button>
+					</div>
+					<div className='flex-none gap-4 mr-4'>
+						<p>user: {user.name}</p>
+						<button className='btn btn-sm' onClick={logout} type='submit'>
+							logout
+						</button>
+					</div>
+				</>
+			) : (
+				' '
+			)}
 		</nav>
 	);
 };

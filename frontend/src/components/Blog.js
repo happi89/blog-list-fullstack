@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import blogService from '../services/blog';
+import { useParams } from 'react-router-dom';
+import blogServices from '../services/blog';
 
 // eslint-disable-next-line no-unused-vars
-const Blog = ({ blog, setBlogs, user, blogs }) => {
+const Blog = ({ setBlogs, user, blogs }) => {
+	const [blog, setBlog] = useState();
+
+	const { id } = useParams();
+
+	useEffect(() => {
+		blogServices.getBlog(id).then((blog) => setBlog(blog));
+	}, []);
+
 	const showDeleteButton = (blog) => {
 		if (user?.username === blog?.user?.username) {
 			return (
 				<button
 					onClick={() => deleteBlog(blog)}
-					className='btn btn-sm w-full btn-error mt-2'>
+					className='btn btn-sm w-full btn-error mt-4'>
 					delete
 				</button>
 			);
@@ -34,53 +44,32 @@ const Blog = ({ blog, setBlogs, user, blogs }) => {
 		};
 		blogService.addLike(updatedBlog).then((updatedBlog) => {
 			const updatedBlogs = blogs
-				.map((blog) => (blog?.id !== updatedBlog?.id ? blog : updatedBlog))
+				.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
 				.sort((a, b) => b.likes - a.likes);
 			setBlogs(updatedBlogs);
 		});
 	};
 
-	const [visible, setVisible] = useState(true);
-
-	const showWhenHidden = { display: visible ? 'none' : '' };
-	const hideWhenShown = { display: visible ? '' : 'none' };
-
-	const toggleVisibility = () => {
-		setVisible(!visible);
-	};
-
 	return (
-		<div className='p-4 rounded border border-black my-2 w-96'>
-			<div style={hideWhenShown} className='flex justify-between'>
-				<span>
-					{blog.title} <strong>by {blog.author}</strong>
-				</span>
-				<button onClick={toggleVisibility} className='btn btn-xs'>
-					Show More
-				</button>
-			</div>
-
-			<div style={showWhenHidden}>
-				<div className='flex justify-between my-1'>
-					<span>
-						{blog.title} <strong>by {blog.author}</strong>
+		<div className='p-4 w-96 my-0 mx-auto'>
+			<div>
+				<div className='flex justify-between mb-3'>
+					<span className='text-lg'>
+						{blog?.title} <strong>by {blog?.author}</strong>
 					</span>
-					<button onClick={toggleVisibility} className='btn btn-xs w-20 ml-2'>
-						Hide
-					</button>
 				</div>
 				<p className='my-2'>
 					<strong>Url: </strong>
 					<a
-						href={blog.url}
+						href={blog?.url}
 						target='_blank'
 						rel='noreferrer'
 						className='link text-blue-900'>
-						{blog.url}
+						{blog?.url}
 					</a>
 				</p>
 				<p className='my-1'>
-					<strong>Likes: </strong> {blog.likes}{' '}
+					<strong>Likes: </strong> {blog?.likes}{' '}
 					<button
 						onClick={() => addLike(blog)}
 						className='btn btn-xs btn-primary w-16 ml-3 my-1'>
@@ -89,7 +78,7 @@ const Blog = ({ blog, setBlogs, user, blogs }) => {
 				</p>
 				<p className='my-1'>
 					<strong>posted by: </strong>
-					{blog.user.username}
+					{blog?.user?.username}
 				</p>
 				{showDeleteButton(blog)}
 			</div>

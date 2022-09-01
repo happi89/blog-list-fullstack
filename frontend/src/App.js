@@ -7,6 +7,7 @@ import BlogPage from './pages/BlogPage';
 import NavBar from './components/NavBar';
 import User from './components/User';
 import userServices from './services/user';
+import Blog from './components/Blog';
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -26,6 +27,7 @@ const App = () => {
 			const user = JSON.parse(loggedInUserJson);
 			setUser(user);
 			blogService.setToken(user.token);
+			navigate('/blogs');
 		}
 		if (!loggedInUserJson) {
 			navigate('/');
@@ -43,9 +45,10 @@ const App = () => {
 				<Route path='/' element={<LoginPage setUser={setUser} />} />
 				<Route path='/users' element={<Users users={users} />} />
 				<Route path='/users/:id' element={<User />} />
+				<Route path='/blogs' element={<BlogPage blogs={blogs} />} />
 				<Route
-					path='/blogs'
-					element={<BlogPage blogs={blogs} setBlogs={setBlogs} user={user} />}
+					path='/blogs/:id'
+					element={<Blog blogs={blogs} setBlogs={setBlogs} user={user} />}
 				/>
 			</Routes>
 		</>

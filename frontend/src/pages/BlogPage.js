@@ -1,9 +1,9 @@
 import { useRef } from 'react';
-import Blog from '../components/Blog';
+import BlogList from '../components/BlogList';
 import BlogForm from '../components/BlogForm';
 import Toggable from '../components/Toggable';
 
-const BlogPage = ({ blogs, setBlogs, user }) => {
+const BlogPage = ({ blogs, setBlogs }) => {
 	const blogFormRef = useRef(null);
 
 	const blogForm = () => (
@@ -15,16 +15,9 @@ const BlogPage = ({ blogs, setBlogs, user }) => {
 	return (
 		<div className='flex flex-col items-center'>
 			{/* <Notification message={success} type={type} /> */}
+			<h1 className='text-4xl font-bold my-3'>Blogs</h1>
 			{blogForm()}
-			{blogs.map((blog) => (
-				<Blog
-					blog={blog}
-					key={blog.id}
-					user={user}
-					setBlogs={setBlogs}
-					blogs={blogs}
-				/>
-			))}{' '}
+			<BlogList blogs={blogs} />
 		</div>
 	);
 };
