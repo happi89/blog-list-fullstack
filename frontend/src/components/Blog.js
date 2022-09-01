@@ -4,7 +4,7 @@ import blogService from '../services/blog';
 // eslint-disable-next-line no-unused-vars
 const Blog = ({ blog, setBlogs, user, blogs }) => {
 	const showDeleteButton = (blog) => {
-		if (user?.username === blog.user.username) {
+		if (user?.username === blog?.user?.username) {
 			return (
 				<button
 					onClick={() => deleteBlog(blog)}
@@ -33,11 +33,10 @@ const Blog = ({ blog, setBlogs, user, blogs }) => {
 			likes: (blog.likes += 1),
 		};
 		blogService.addLike(updatedBlog).then((updatedBlog) => {
-			setBlogs(
-				blogs
-					.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
-					.sort((a, b) => b.likes - a.likes)
-			);
+			const updatedBlogs = blogs
+				.map((blog) => (blog?.id !== updatedBlog?.id ? blog : updatedBlog))
+				.sort((a, b) => b.likes - a.likes);
+			setBlogs(updatedBlogs);
 		});
 	};
 

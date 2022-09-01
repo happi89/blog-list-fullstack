@@ -5,11 +5,13 @@ import Users from './components/Users';
 import LoginPage from './pages/LoginPage';
 import BlogPage from './pages/BlogPage';
 import NavBar from './components/NavBar';
+import User from './components/User';
+import userServices from './services/user';
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
 	const [user, setUser] = useState(null);
-
+	const [users, setUsers] = useState([]);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -30,15 +32,20 @@ const App = () => {
 		}
 	}, []);
 
+	useEffect(() => {
+		userServices.getUsers().then((users) => setUsers(users));
+	}, []);
+
 	return (
 		<>
 			<NavBar user={user} setUser={setUser} />
 			<Routes>
 				<Route path='/' element={<LoginPage setUser={setUser} />} />
-				<Route path='/users' element={<Users />} />
+				<Route path='/users' element={<Users users={users} />} />
+				<Route path='/users/:id' element={<User />} />
 				<Route
 					path='/blogs'
-					element={<BlogPage blogs={blogs} setBlogs={setBlogs} />}
+					element={<BlogPage blogs={blogs} setBlogs={setBlogs} user={user} />}
 				/>
 			</Routes>
 		</>

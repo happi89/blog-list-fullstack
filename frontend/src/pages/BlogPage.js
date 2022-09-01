@@ -3,7 +3,7 @@ import Blog from '../components/Blog';
 import BlogForm from '../components/BlogForm';
 import Toggable from '../components/Toggable';
 
-const BlogPage = ({ blogs, setBlogs }) => {
+const BlogPage = ({ blogs, setBlogs, user }) => {
 	const blogFormRef = useRef(null);
 
 	const blogForm = () => (
@@ -17,7 +17,13 @@ const BlogPage = ({ blogs, setBlogs }) => {
 			{/* <Notification message={success} type={type} /> */}
 			{blogForm()}
 			{blogs.map((blog) => (
-				<Blog blog={blog} key={blog.id} />
+				<Blog
+					blog={blog}
+					key={blog.id}
+					user={user}
+					setBlogs={setBlogs}
+					blogs={blogs}
+				/>
 			))}{' '}
 		</div>
 	);

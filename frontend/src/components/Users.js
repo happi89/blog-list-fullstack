@@ -1,15 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
-import { useState, useEffect } from 'react';
-import userServices from '../services/user';
+import { Link } from 'react-router-dom';
 
-const User = () => {
-	const [users, setUsers] = useState([]);
-
-	useEffect(() => {
-		userServices.getUsers().then((users) => setUsers(users));
-	}, []);
-
+const User = ({ users }) => {
 	return (
 		<div className='flex flex-col items-center'>
 			<h1 className='text-2xl font-bold my-3'>Users</h1>
@@ -24,7 +17,9 @@ const User = () => {
 					{users?.map((user) => {
 						return (
 							<tr key={user.id}>
-								<td>{user.name}</td>
+								<td className='link'>
+									<Link to={`/users/${user.id}`}>{user.name}</Link>
+								</td>
 								<td>{user.blogs.length}</td>
 							</tr>
 						);
